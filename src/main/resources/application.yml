@@ -1,0 +1,72 @@
+spring:
+  docker:
+    compose:
+      lifecycle-management: start_only
+  application:
+    name: stb-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stb
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    #show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+  mail:
+    host: localhost
+    port: 1025
+    username: stb
+    password: stb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 55MB
+      enabled: true
+
+  threads:
+    virtual:
+      enabled: true
+
+
+
+application:
+  frontend-url: http://localhost:4200
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      refresh-token-expiration: 604800000 # 1 week in milliseconds
+      token-expiration: 10800000  # 3 hours in milliseconds
+  cors:
+    allowed-origins: http://localhost:4200
+
+
+springdoc:
+  api-docs:
+    path: /api-docs/v3
+  swagger-ui:
+    path: /docs
+    operationsSorter: method
+    display-request-duration: true
+  default-produces-media-type: application/json
