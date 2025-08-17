@@ -1,0 +1,67 @@
+
+https://www.plantuml.com/plantuml/uml/bLNDQjj04BxhAGRdu9CJAFHIWeb_e2sqfTH9hsKiZUnfLhlkxAw3ANcVvZdyOfLMMijUWafzqtpVDplppGo-imx5-KfbOvXC9h0mkkID5tHiD9H6025NX9e4K1TG6I7OYId9sfg12fGnZuqqiu-iToXO0UREoCeT504-dSMzfHmjmUyCwjySyyUD6A-BXL56u1DljcwkFBMeaOAaHKx1cOXvQcDNRy8lUpxBBvGxr1iLNaXoNBqDlvglg7JW34Zp7XJSgDZepB5J1ACbuwPELX4K10kqK8mV72kshIKJcErsYlFmrL2-ir15si7gVZxAEXkNLB8cc3L6sE1Ey0GMYcjgzp4hAjQ9OdMmZYgODxQW78Bd3pOKGcsYlibHGpx-gGZIChh-nx2e8u8AqBijQHVBzfQWcKHWnQcCLkD8Avba16ZXOV5ZLiUoc2wKtnTqgNz_V14Ii4Q73M4LKtmDN_GgMv65zV557rzApXbPo4RPd3I5e73wr4VDZad0QzXtZKTLWD3HlQ2s9ScbS66qzSer3u-tR9qH_kKfQZ-4oE5IyerosXiMqAPsfhFGtg0YSNsnNyx1w5UOyB1TmG3VBHXvEINyZ1etL6ibqQtyZcJFjjF6_a_2Y4S7KdszlsBy_dNt0hW_ILCdVf9xNTT0kVkdvmGEruhGGq6mDb94_HBjTcrGYkmvNaGu7fXCJ_x1p5gJSsjnk8Lk7oSrgL-pYsYoHGcMxae2T-kGH9D9Xna7B1dQ1P0E9SNx_cFtbnUxf1tfWdH-28tttSBrzJIUARo3srlMkV85JQTPslmmDVLYa1sj6I8bJWrJU-E6YQcHm_npOmTedUKnTUDt1rhe3kAcNV26Drn5Sa3_qK1oGscDTwIBvd_wBm00
+
+@startuml
+' --- Configuration for a cleaner and more professional look ---
+skinparam actorStyle aw
+skinparam usecase {
+    BackgroundColor LightBlue
+    BorderColor Blue
+    ArrowColor #222222
+}
+skinparam rectangle {
+    BorderColor #555555
+}
+left to right direction
+title "Diagramme de Cas d'Utilisation - Application de Virement STB"
+
+' --- Define Actors ---
+actor Client
+actor Admin
+
+' --- Define System Boundary and Use Cases ---
+rectangle "Système de Virement STB" {
+    ' Central authentication use case
+    usecase "S'authentifier" as UC_Auth
+
+    ' Client Use Cases
+    usecase "Gérer son profil" as UC_Profile
+    usecase "Gérer les bénéficiaires" as UC_Beneficiaries
+    usecase "Initier un virement" as UC_InitiateTransfer
+    usecase "Consulter l'historique" as UC_History
+    usecase "Recevoir notifications/alertes" as UC_Notifications
+
+    ' Admin Use Cases
+    usecase "Gérer les utilisateurs" as UC_ManageUsers
+    usecase "Superviser les virements" as UC_SuperviseTransfers
+    usecase "Approuver un virement" as UC_ApproveTransfer
+    usecase "Rejeter un virement" as UC_RejectTransfer
+    usecase "Consulter le tableau de bord" as UC_Dashboard
+}
+
+' --- Actor -> Use Case Associations ---
+Client --> UC_Profile
+Client --> UC_Beneficiaries
+Client --> UC_InitiateTransfer
+Client --> UC_History
+Client --> UC_Notifications
+
+Admin --> UC_ManageUsers
+Admin --> UC_SuperviseTransfers
+Admin --> UC_Dashboard
+
+' --- Authentication Dependency ---
+UC_Profile ..> UC_Auth : <<include>>
+UC_Beneficiaries ..> UC_Auth : <<include>>
+UC_InitiateTransfer ..> UC_Auth : <<include>>
+UC_History ..> UC_Auth : <<include>>
+UC_Notifications ..> UC_Auth : <<include>>
+UC_ManageUsers ..> UC_Auth : <<include>>
+UC_SuperviseTransfers ..> UC_Auth : <<include>>
+UC_Dashboard ..> UC_Auth : <<include>>
+
+' --- Supervision includes Approve/Reject ---
+UC_SuperviseTransfers ..> UC_ApproveTransfer : <<include>>
+UC_SuperviseTransfers ..> UC_RejectTransfer : <<include>>
+
+@enduml

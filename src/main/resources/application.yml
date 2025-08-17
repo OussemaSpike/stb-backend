@@ -28,7 +28,7 @@ spring:
   mail:
     host: localhost
     port: 1025
-    username: stb
+    username: noreply@stb.com
     password: stb
     properties:
       mail:

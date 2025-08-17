@@ -1,7 +1,7 @@
 package com.pfe.stb.user.service;
 
-import com.pfe.stb.user.model.enums.RoleType;
 import com.pfe.stb.user.model.User;
+import com.pfe.stb.user.model.enums.RoleType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -27,7 +27,7 @@ public class UserSpecifications {
               cb.like(cb.lower(root.get("email")), "%" + criteria.toLowerCase() + "%"),
               cb.like(cb.lower(root.get("firstName")), "%" + criteria.toLowerCase() + "%"),
               cb.like(cb.lower(root.get("lastName")), "%" + criteria.toLowerCase() + "%"),
-              cb.like(cb.lower(root.get("phone_number")), "%" + criteria.toLowerCase() + "%"));
+              cb.like(cb.lower(root.get("phoneNumber")), "%" + criteria.toLowerCase() + "%"));
 
       if (role == null) {
         return search;

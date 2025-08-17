@@ -74,13 +74,15 @@ public class AuthService implements AuthUseCases {
     if (user.getPassword() != null) {
       user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
-    Role roleEntity = roleRepository.findByName(RoleType.USER);
+    Role roleEntity = roleRepository.findByName(RoleType.CLIENT);
     user.setEnabled(true);
     user.setRoles(Set.of(roleEntity));
     User savedUser;
     try {
       savedUser = userRepository.save(user);
+
     } catch (DataIntegrityViolationException e) {
+
       throw new ExistsException(
           ExistsException.ExistsExceptionType.EMAIL_ALREADY_EXISTS, e.getCause());
     }
@@ -110,7 +112,6 @@ public class AuthService implements AuthUseCases {
     authCode.setStatus(CodeStatus.USED);
     codes.save(authCode);
     log.info("Account activated for user: {}", user.getEmail());
-    // --- End: Logic from AuthJpaAdapter.activateAccount ---
 
     // Mark all other activation tokens for the user as used
     List<AuthCode> userTokens =
@@ -151,11 +152,14 @@ public class AuthService implements AuthUseCases {
         userRepository
             .findByEmail(email)
             .orElseThrow(
-                () ->
-                    new NotFoundException(
-                        NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, email));
+                () -> {
+                  return new NotFoundException(
+                      NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, email);
+                });
+
     String code = generateCode(user.getId(), user.getEmail(), RESET_PASSWORD);
     sendEmail(email, code, EmailType.RESET_PASSWORD);
+
   }
 
   @Override
@@ -170,7 +174,10 @@ public class AuthService implements AuthUseCases {
       if (user.getPassword() == null) {
         String newCode = generateCode(user.getId(), user.getEmail(), SET_PASSWORD);
         sendEmail(user.getEmail(), newCode, EmailType.SET_PASSWORD);
+
+
       } else {
+
         throw new NotFoundException(NotFoundException.NotFoundExceptionType.CODE_EXPIRED, code);
       }
       return;
@@ -179,6 +186,7 @@ public class AuthService implements AuthUseCases {
     changeUserPassword(user, password);
     authCode.setStatus(CodeStatus.USED);
     codes.save(authCode);
+
   }
 
   @Override
@@ -188,11 +196,23 @@ public class AuthService implements AuthUseCases {
         userRepository
             .findByEmail(email)
             .orElseThrow(
-                () ->
-                    new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND));
-    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-    userRepository.save(user);
-    return this.createAccessToken(user);
+                () -> {
+
+                  return new NotFoundException(
+                      NotFoundException.NotFoundExceptionType.USER_NOT_FOUND);
+                });
+
+    try {
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+      userRepository.save(user);
+
+
+      return this.createAccessToken(user);
+
+    } catch (Exception e) {
+      // Audit log for failed login - wrong credentials
+      throw e;
+    }
   }
 
   @Override
@@ -218,6 +238,7 @@ public class AuthService implements AuthUseCases {
     User user = checkUserById(id);
 
     if (user.getPassword() == null) {
+
       throw new BadRequestException(BadRequestException.BadRequestExceptionType.NO_PASSWORD);
     }
 
@@ -225,11 +246,13 @@ public class AuthService implements AuthUseCases {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(user.getEmail(), oldPassword));
     } catch (Exception e) {
+
       throw new BadRequestException(BadRequestException.BadRequestExceptionType.WRONG_PASSWORD);
     }
     checkPassword(newPassword, confirmPassword);
 
     changeUserPassword(user, newPassword);
+    
   }
 
   private AuthResponse createAccessToken(User user) {

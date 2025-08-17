@@ -1,0 +1,38 @@
+sequenceDiagram
+    title Diagramme de Séquence - Approbation d'un Virement par l'Admin
+
+    actor A as Admin
+    participant ATC as AdminTransferController
+    participant TS as TransferService
+    participant TR as TransferRepository
+    participant BAR as BankAccountRepository
+    participant NS as NotificationService
+
+    A->>ATC: POST /api/admin/transfers/{id}/approve
+    Note over A,ATC: L'admin approuve un virement spécifique.
+
+    ATC->>TS: approveTransfer(transferId, adminDetails)
+
+    TS->>TR: findById(transferId)
+    TR-->>TS: Transfer entity (status: PENDING)
+    Note right of TS: 1. Vérifier que le virement existe<br/>et que son statut est "PENDING".
+
+    TS->>BAR: findByUserId(senderId)
+    BAR-->>TS: senderAccount
+
+    TS->>BAR: findByRib(receiverRib)
+    BAR-->>TS: receiverAccount
+    Note over TS: 2. Récupérer les comptes expéditeur et bénéficiaire.
+
+    Note over TS: 3. Exécuter la transaction bancaire (débit/crédit)<br/>de façon atomique (ACID).
+
+    TS->>TR: save(updatedTransfer)
+    Note over TR,TS: 4. Mettre à jour le statut du virement à "COMPLETED".
+    TR-->>TS: completedTransferEntity
+
+    TS->>NS: sendTransferCompletedEmail(client, completedTransfer)
+    Note over TS,NS: 5. Envoyer une notification au client (asynchrone).
+
+    TS-->>ATC: TransferDTO (statut COMPLETED)
+
+    ATC-->>A: 200 OK

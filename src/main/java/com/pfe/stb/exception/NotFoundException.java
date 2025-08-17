@@ -52,7 +52,23 @@ public class NotFoundException extends ApplicationException {
     CODE_NOT_FOUND(
         "error.server.not-found.code-not-found.title",
         "error.server.not-found.code-not-found.msg",
-        "Code not found : {0}");
+        "Code not found : {0}"),
+    BANK_ACCOUNT_NOT_FOUND(
+        "error.server.not-found.bank-account.title",
+        "error.server.not-found.bank-account.msg",
+        "Bank account not found for user : {0}"),
+    BENEFICIARY_NOT_FOUND(
+        "error.server.not-found.beneficiary.title",
+        "error.server.not-found.beneficiary.msg",
+        "Beneficiary not found : {0}"),
+    TRANSFER_NOT_FOUND(
+        "error.server.not-found.transfer.title",
+        "error.server.not-found.transfer.msg",
+        "Transfer not found : {0}"),
+    AUDIT_LOG_NOT_FOUND(
+        "error.server.not-found.audit-log.title",
+        "error.server.not-found.audit-log.msg",
+        "Audit log not found : {0}");
 
     private final String messageKey;
     private final String titleKey;

@@ -1,0 +1,25 @@
+sequenceDiagram
+    title Diagramme de Séquence - Authentification du Client
+
+    participant C as Client
+    participant AC as AuthController
+    participant AM as AuthenticationManager
+    participant UR as UserRepository
+    participant JS as JwtService
+
+    C->>AC: POST /api/auth/signin<br/>(LoginRequestDTO)
+    Note over C,AC: Le client envoie son email et mot de passe.
+
+    AC->>AM: authenticate(usernamePasswordAuthToken)
+
+    AM->>UR: findByEmail(email)
+    UR-->>AM: UserDetails (mot de passe haché)
+
+    Note over AM: Compare le mot de passe fourni<br/>avec le mot de passe haché (BCrypt).
+    AM-->>AC: Authentication object (succès)
+
+    AC->>JS: generateTokens(authentication)
+    Note over JS: Crée un JWT (jeton d'accès)<br/>et un Refresh Token.
+    JS-->>AC: Tokens (JWT, Refresh Token)
+
+    AC-->>C: 200 OK<br/>(LoginResponseDTO avec tokens)

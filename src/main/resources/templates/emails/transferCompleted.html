@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Virement reçu</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: #27ae60;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+      }
+      .content {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-top: none;
+      }
+      .transfer-details {
+        background-color: white;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        border-left: 4px solid #27ae60;
+      }
+      .detail-row {
+        margin: 8px 0;
+        display: flex;
+        justify-content: space-between;
+      }
+      .detail-label {
+        font-weight: bold;
+        color: #27ae60;
+      }
+      .amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #27ae60;
+      }
+      .footer {
+        background-color: #004aad;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        border-radius: 0 0 5px 5px;
+        font-size: 12px;
+      }
+      .button {
+        display: inline-block;
+        background-color: #27ae60;
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        color: #155724;
+      }
+      .highlight {
+        background-color: #fff3cd;
+        padding: 15px;
+        border-radius: 5px;
+        border-left: 4px solid #ffc107;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>💰 STB - Virement reçu</h1>
+    </div>
+
+    <div class="content">
+      <div class="success">
+        <strong>🎉 BONNE NOUVELLE!</strong> Vous avez reçu un virement sur votre
+        compte STB.
+      </div>
+
+      <p>Bonjour <strong th:text="${recipientName}">Client</strong>,</p>
+
+      <p>
+        Nous avons le plaisir de vous informer qu'un virement a été effectué sur
+        votre compte.
+      </p>
+
+      <div class="highlight">
+        <h3>💸 Votre compte a été crédité!</h3>
+        <p>
+          Le montant de
+          <strong th:text="${amount} + ' ' + ${currency}">1000.00 TND</strong> a
+          été ajouté à votre solde.
+        </p>
+      </div>
+
+      <div class="transfer-details">
+        <h3>📋 Détails du virement reçu</h3>
+
+        <div class="detail-row">
+          <span class="detail-label">Référence:</span>
+          <span th:text="${transferReference}">REF123456</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Expéditeur:</span>
+          <span th:text="${senderName}">Nom Expéditeur</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Montant reçu:</span>
+          <span
+            class="amount"
+            th:text="${amount} + ' ' + ${currency}"
+            >1000.00 TND</span
+          >
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Motif:</span>
+          <span th:text="${reason}">Motif du virement</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Date de réception:</span>
+          <span th:text="${approvedAt}">01/01/2024 à 14:30</span>
+        </div>
+      </div>
+
+      <p><strong>📱 Actions disponibles:</strong></p>
+      <ul>
+        <li>Consultez votre nouveau solde dans votre espace client</li>
+        <li>Téléchargez un relevé de compte mis à jour</li>
+        <li>Configurez des alertes pour les virements entrants</li>
+      </ul>
+
+      <div style="text-align: center">
+        <a
+          href="#"
+          class="button"
+          >👀 Consulter mon compte</a
+        >
+      </div>
+
+      <p>
+        <em
+          >Ce virement est maintenant disponible sur votre compte et peut être
+          utilisé immédiatement.</em
+        >
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>
+        📧 Cet email a été généré automatiquement par le système STB.<br />
+        Ne pas répondre à cette adresse email.
+      </p>
+      <p>© 2024 Société Tunisienne de Banque. Tous droits réservés.</p>
+    </div>
+  </body>
+</html>

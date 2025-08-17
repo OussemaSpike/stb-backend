@@ -1,7 +1,7 @@
 package com.pfe.stb.config.init;
 
 import static com.pfe.stb.user.model.enums.RoleType.ADMIN;
-import static com.pfe.stb.user.model.enums.RoleType.USER;
+import static com.pfe.stb.user.model.enums.RoleType.CLIENT;
 
 import com.pfe.stb.user.model.Role;
 import com.pfe.stb.user.repository.RoleRepository;
@@ -15,8 +15,8 @@ public class RolesInitializer {
   private final RoleRepository rolesRepository;
 
   public void createRoles() {
-    if (rolesRepository.findByName(USER) == null) {
-      rolesRepository.save(Role.builder().name(USER).build());
+    if (rolesRepository.findByName(CLIENT) == null) {
+      rolesRepository.save(Role.builder().name(CLIENT).build());
     }
     if (rolesRepository.findByName(ADMIN) == null) {
       rolesRepository.save(Role.builder().name(ADMIN).build());

@@ -23,7 +23,7 @@ public class DefaultUserInitializer {
   }
 
   private void createAdmin() {
-    if (userRepository.findByEmail("stb@admin.com").isPresent()) {
+    if (userRepository.findByEmail("admin@stb.com").isPresent()) {
       return;
     }
 

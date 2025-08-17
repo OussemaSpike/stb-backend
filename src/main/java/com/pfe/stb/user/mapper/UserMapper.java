@@ -5,6 +5,7 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 import com.pfe.stb.auth.dto.request.SignUpDto;
 import com.pfe.stb.auth.dto.response.SignUpResponseDto;
 import com.pfe.stb.user.dto.response.UserDto;
+import com.pfe.stb.user.dto.response.UserForAdminDto;
 import com.pfe.stb.user.model.Role;
 import com.pfe.stb.user.model.User;
 import java.util.Collections;
@@ -17,8 +18,12 @@ import org.mapstruct.Mapping;
 public abstract class UserMapper {
 
   public abstract User toAuthUserFromDto(SignUpDto signupDto);
+
   @Mapping(target = "roles", expression = "java(mapRolesToRoleNames(user.getRoles()))")
   public abstract UserDto toUserDto(User user);
+
+  @Mapping(target = "roles", expression = "java(mapRolesToRoleNames(user.getRoles()))")
+  public abstract UserForAdminDto toUserForAdminDto(User user);
 
   @Mapping(target = "roles", expression = "java(mapRolesToRoleNames(user.getRoles()))")
   public abstract SignUpResponseDto toSignUpResponseDto(User user);

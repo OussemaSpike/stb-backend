@@ -1,0 +1,100 @@
+---
+config:
+  class:
+    hideEmptyMembersBox: true
+  layout: elk
+---
+classDiagram
+direction BT
+    class CompteBancaire {
+	    +uuid id
+	    +uuid user_id
+	    +date limit_reset_date
+	    #smallint version
+	    #timestamp created_at
+	    #timestamp updated_at
+	    +varchar(255) account_type
+	    +varchar(20) rib
+	    +varchar(3) currency
+	    +numeric(15,3) balance
+	    +numeric(15,3) available_balance
+	    +varchar(255) status
+	    +numeric(15,3) single_transfer_limit
+	    +numeric(15,3) daily_transfer_limit
+	    +numeric(15,3) monthly_transfer_limit
+	    +numeric(15,3) remaining_daily_limit
+	    +numeric(15,3) remaining_monthly_limit
+	    +numeric(15,3) blocked_amount
+	    +varchar(255) block_reason
+    }
+    class Beneficiaire {
+	    +uuid id
+	    +uuid user_id
+	    +boolean is_active
+	    +boolean is_verified
+	    #smallint version
+	    #timestamp created_at
+	    #timestamp updated_at
+	    +varchar(100) name
+	    +varchar(20) rib
+	    +varchar(100) bank_name
+    }
+    class CodeValidation {
+	    +uuid id
+	    +uuid user_id
+	    +timestamp expired_at
+	    #smallint version
+	    #timestamp created_at
+	    #timestamp updated_at
+	    +varchar(255) email
+	    +varchar(255) code
+	    +varchar(255) type
+	    +varchar(255) status
+    }
+    class Role {
+	    +integer id
+	    +varchar(255) name
+    }
+    class Virement {
+	    +uuid id
+	    +uuid user_id
+	    +uuid from_account_id
+	    +uuid beneficiary_id
+	    +timestamp execution_date
+	    +timestamp completed_at
+	    #smallint version
+	    #timestamp created_at
+	    #timestamp updated_at
+	    +varchar(50) reference
+	    +numeric(15,2) amount
+	    +numeric(15,2) fees
+	    +numeric(15,2) total_amount
+	    +varchar(3) currency
+	    +varchar(500) reason
+	    +varchar(255) status
+	    +varchar(500) failure_reason
+	    +varchar(45) ip_address
+    }
+    class Utilisateur {
+	    +uuid id
+	    +boolean email_verified
+	    +boolean enabled
+	    +boolean account_locked
+	    #smallint version
+	    #timestamp created_at
+	    #timestamp updated_at
+	    +varchar(255) first_name
+	    +varchar(255) last_name
+	    +varchar(255) email
+	    +varchar(255) password
+	    +varchar(255) phone_number
+	    +varchar(255) cin
+	    +varchar(255) address
+    }
+    Utilisateur "1" -- "0..*" CompteBancaire : possède
+    Utilisateur "1" -- "0..*" Beneficiaire : gère
+    Utilisateur "1" -- "0..*" CodeValidation : est associé à
+    Virement "0..*" -- "1" CompteBancaire : est émis depuis
+    Virement "0..*" -- "1" Beneficiaire : est destiné à
+    Virement "0..*" -- "1" Utilisateur : est initié par
+    Utilisateur "0..*" -- "1..*" Role : a pour

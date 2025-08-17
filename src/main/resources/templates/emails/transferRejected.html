@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Virement rejeté</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: #e74c3c;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+      }
+      .content {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-top: none;
+      }
+      .transfer-details {
+        background-color: white;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        border-left: 4px solid #e74c3c;
+      }
+      .detail-row {
+        margin: 8px 0;
+        display: flex;
+        justify-content: space-between;
+      }
+      .detail-label {
+        font-weight: bold;
+        color: #e74c3c;
+      }
+      .amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #e74c3c;
+      }
+      .footer {
+        background-color: #004aad;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        border-radius: 0 0 5px 5px;
+        font-size: 12px;
+      }
+      .button {
+        display: inline-block;
+        background-color: #004aad;
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        color: #721c24;
+      }
+      .status-badge {
+        background-color: #e74c3c;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .reason-box {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>❌ STB - Virement rejeté</h1>
+    </div>
+
+    <div class="content">
+      <div class="error">
+        <strong>⚠️ INFORMATION IMPORTANTE:</strong> Votre demande de virement a
+        été rejetée.
+      </div>
+
+      <p>Bonjour <strong th:text="${recipientName}">Client</strong>,</p>
+
+      <p>
+        Nous regrettons de vous informer que votre demande de virement n'a pas
+        pu être approuvée par notre équipe.
+      </p>
+
+      <div class="transfer-details">
+        <h3>📋 Détails du virement rejeté</h3>
+
+        <div class="detail-row">
+          <span class="detail-label">Statut:</span>
+          <span class="status-badge">❌ REJETÉ</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Référence:</span>
+          <span th:text="${transferReference}">REF123456</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Bénéficiaire:</span>
+          <span th:text="${beneficiaryName}">Nom Bénéficiaire</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">RIB Bénéficiaire:</span>
+          <span th:text="${beneficiaryRib}">12 345 678901234567890 12</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Montant:</span>
+          <span
+            class="amount"
+            th:text="${amount} + ' ' + ${currency}"
+            >1000.00 TND</span
+          >
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Motif initial:</span>
+          <span th:text="${reason}">Motif du virement</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Date de rejet:</span>
+          <span th:text="${rejectedAt}">01/01/2024 à 14:30</span>
+        </div>
+      </div>
+
+      <div
+        class="reason-box"
+        th:if="${rejectionReason}">
+        <h4>📝 Motif du rejet:</h4>
+        <p th:text="${rejectionReason}">
+          Raison du rejet fournie par l'administrateur
+        </p>
+      </div>
+
+      <div
+        class="reason-box"
+        th:unless="${rejectionReason}">
+        <h4>📝 Motif du rejet:</h4>
+        <p>
+          Aucun motif spécifique n'a été fourni. Veuillez contacter notre
+          service client pour plus d'informations.
+        </p>
+      </div>
+
+      <p><strong>🔄 Que faire maintenant?</strong></p>
+      <ul>
+        <li>Vérifiez que les informations du bénéficiaire sont correctes</li>
+        <li>Assurez-vous que votre compte dispose du solde suffisant</li>
+        <li>Contactez notre service client si vous avez des questions</li>
+        <li>Vous pouvez soumettre une nouvelle demande de virement</li>
+      </ul>
+
+      <div style="text-align: center">
+        <a
+          href="#"
+          class="button"
+          >📞 Contacter le service client</a
+        >
+        <a
+          href="#"
+          class="button"
+          >🔄 Nouveau virement</a
+        >
+      </div>
+
+      <p>
+        <em
+          >Nous nous excusons pour le désagrément et restons à votre disposition
+          pour toute assistance.</em
+        >
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>
+        📧 Cet email a été généré automatiquement par le système STB.<br />
+        Ne pas répondre à cette adresse email.
+      </p>
+      <p>© 2024 Société Tunisienne de Banque. Tous droits réservés.</p>
+    </div>
+  </body>
+</html>

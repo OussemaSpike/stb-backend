@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Virement échoué</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: #dc3545;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+      }
+      .content {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-top: none;
+      }
+      .transfer-details {
+        background-color: white;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        border-left: 4px solid #dc3545;
+      }
+      .detail-row {
+        margin: 8px 0;
+        display: flex;
+        justify-content: space-between;
+      }
+      .detail-label {
+        font-weight: bold;
+        color: #dc3545;
+      }
+      .amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #dc3545;
+      }
+      .footer {
+        background-color: #004aad;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        border-radius: 0 0 5px 5px;
+        font-size: 12px;
+      }
+      .button {
+        display: inline-block;
+        background-color: #004aad;
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        color: #721c24;
+      }
+      .status-badge {
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .reason-box {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .info-box {
+        background-color: #cce5ff;
+        border: 1px solid #99ccff;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        color: #004085;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>⚠️ STB - Virement échoué</h1>
+    </div>
+
+    <div class="content">
+      <div class="error">
+        <strong>❌ PROBLÈME TECHNIQUE:</strong> Votre virement n'a pas pu être
+        traité.
+      </div>
+
+      <p>Bonjour <strong th:text="${recipientName}">Client</strong>,</p>
+
+      <p>
+        Nous regrettons de vous informer qu'un problème technique a empêché
+        l'exécution de votre virement.
+      </p>
+
+      <div class="transfer-details">
+        <h3>📋 Détails du virement échoué</h3>
+
+        <div class="detail-row">
+          <span class="detail-label">Statut:</span>
+          <span class="status-badge">❌ ÉCHOUÉ</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Référence:</span>
+          <span th:text="${transferReference}">REF123456</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Bénéficiaire:</span>
+          <span th:text="${beneficiaryName}">Nom Bénéficiaire</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">RIB Bénéficiaire:</span>
+          <span th:text="${beneficiaryRib}">12 345 678901234567890 12</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Montant:</span>
+          <span
+            class="amount"
+            th:text="${amount} + ' ' + ${currency}"
+            >1000.00 TND</span
+          >
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Motif:</span>
+          <span th:text="${reason}">Motif du virement</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Date de l'échec:</span>
+          <span th:text="${createdAt}">01/01/2024 à 14:30</span>
+        </div>
+      </div>
+
+      <div
+        class="reason-box"
+        th:if="${failureReason}">
+        <h4>🔍 Cause de l'échec:</h4>
+        <p th:text="${failureReason}">
+          Raison technique de l'échec du virement
+        </p>
+      </div>
+
+      <div class="info-box">
+        <h4>💡 Informations importantes:</h4>
+        <ul>
+          <li>
+            <strong>Aucun débit n'a été effectué</strong> sur votre compte
+          </li>
+          <li>Votre solde reste inchangé</li>
+          <li>Aucune commission n'a été prélevée</li>
+          <li>Vous pouvez relancer le virement à tout moment</li>
+        </ul>
+      </div>
+
+      <p><strong>🔧 Solutions recommandées:</strong></p>
+      <ul>
+        <li>Vérifiez votre solde disponible</li>
+        <li>Confirmez les coordonnées du bénéficiaire (RIB, nom)</li>
+        <li>Essayez de soumettre une nouvelle demande de virement</li>
+        <li>Contactez notre service client pour assistance technique</li>
+      </ul>
+
+      <div style="text-align: center">
+        <a
+          href="#"
+          class="button"
+          >💰 Vérifier mon solde</a
+        >
+        <a
+          href="#"
+          class="button"
+          >🔄 Nouveau virement</a
+        >
+        <a
+          href="#"
+          class="button"
+          >📞 Service client</a
+        >
+      </div>
+
+      <p>
+        <em
+          >Nous nous excusons pour ce désagrément et vous invitons à réessayer
+          ou à nous contacter pour toute assistance.</em
+        >
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>
+        📧 Cet email a été généré automatiquement par le système STB.<br />
+        Ne pas répondre à cette adresse email.
+      </p>
+      <p>© 2024 Société Tunisienne de Banque. Tous droits réservés.</p>
+    </div>
+  </body>
+</html>

@@ -35,7 +35,12 @@ public class User extends AbstractAuditingEntity implements UserDetails, Princip
 
   @Column(name = "firstName", nullable = false)
   private String firstName;
-  
+
+  @Column(name = "cin", unique = true)
+  private String cin;
+
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private BankAccount bankAccount;
 
   @Column(name = "lastName", nullable = false)
   private String lastName;
@@ -50,6 +55,9 @@ public class User extends AbstractAuditingEntity implements UserDetails, Princip
 
   @Column(name = "phone_number")
   private String phoneNumber;
+
+  @Column(name = "address")
+  private String address;
 
   @Column(name = "emailVerified", nullable = false)
   private boolean emailVerified;

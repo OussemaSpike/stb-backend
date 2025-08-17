@@ -1,0 +1,41 @@
+sequenceDiagram
+    title Diagramme de Séquence - Initiation d'un Virement par le Client
+
+    actor C as Client
+    participant TC as TransferController
+    participant TS as TransferService
+    participant BAR as BankAccountRepository
+    participant BR as BeneficiaryRepository
+    participant TR as TransferRepository
+    participant AS as AuditService
+    participant NS as NotificationService
+
+    C->>TC: POST /api/transfers/initiate<br/>(InitiateTransferDTO)
+    Note over C,TC: Le client soumet les détails du virement.
+
+    TC->>TS: initiateTransfer(transferDTO, userDetails)
+
+    TS->>BR: findById(beneficiaryId)
+    Note right of TS: 1. Vérifier que le bénéficiaire existe.
+    BR-->>TS: Beneficiary entity
+
+    TS->>BAR: findByUserId(userId)
+    Note right of TS: 2. Récupérer le compte bancaire du client.
+    BAR-->>TS: BankAccount entity
+
+    Note right of TS: 3. Vérifier que le solde est suffisant.
+
+    TS->>TR: save(newTransferEntity)
+    Note right of TR: 4. Créer le virement avec le statut "PENDING".
+    TR-->>TS: savedTransferEntity
+
+    par Journaliser Action d'Audit
+        TS->>AS: logClientAction("INITIATE_TRANSFER", savedTransfer)
+    and Envoyer Notification aux Admins (asynchrone)
+        TS->>NS: notifyAdminsOfNewTransfer(savedTransfer)
+    end
+    Note over TS: 5. Déclenchement des processus post-création.
+
+    TS-->>TC: TransferDTO (statut PENDING)
+
+    TC-->>C: 201 Created<br/>(TransferDTO)
